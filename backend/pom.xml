@@ -35,10 +35,15 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- В Spring Boot 4 автоконфигурация Flyway вынесена из spring-boot-autoconfigure
+             в отдельный модуль. Одного flyway-core недостаточно: библиотека окажется
+             в classpath, но Spring её не подхватит. Стартер тянет flyway-core сам. -->
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-flyway</artifactId>
         </dependency>
+        <!-- Поддержка диалекта PostgreSQL: с Flyway 10 живёт в отдельном модуле
+             и в стартер не входит. -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>

@@ -9,7 +9,7 @@
 
 | Слой | Технологии |
 | :--- | :--- |
-| Backend | Java 21, Spring Boot 3 (Web, Data JPA, Validation), Maven |
+| Backend | Java 21, Spring Boot 4.0.8 (Web, Data JPA, Validation), Maven |
 | База данных | PostgreSQL 16, миграции через Flyway |
 | Frontend | Angular 20, TypeScript, RxJS, Angular Material |
 | Документация API | springdoc-openapi (Swagger UI) |
@@ -76,15 +76,42 @@ GRANT ALL PRIVILEGES ON DATABASE task_tracker TO task_tracker;
 
 ### 2. Backend
 
-<!-- TODO: этап 2 — заполнить после создания Spring Boot проекта -->
+Требуется запущенная база из шага 1.
 
 ```bash
 cd backend
-./mvnw spring-boot:run
+mvn spring-boot:run
 ```
 
 Приложение поднимается на `http://localhost:8080`.
 Схема БД накатывается автоматически миграциями Flyway при старте.
+
+Сборка исполняемого jar:
+
+```bash
+cd backend
+mvn clean package
+java -jar target/task-tracker-0.0.1-SNAPSHOT.jar
+```
+
+Параметры подключения читаются из `backend/src/main/resources/application.yml`
+и переопределяются переменными окружения:
+
+| Переменная | Значение по умолчанию |
+| :--- | :--- |
+| `DB_URL` | `jdbc:postgresql://localhost:5432/task_tracker` |
+| `DB_USERNAME` | `task_tracker` |
+| `DB_PASSWORD` | `task_tracker` |
+| `SERVER_PORT` | `8080` |
+
+Чтобы проект собирался без предустановленного Maven, один раз сгенерируйте wrapper:
+
+```bash
+cd backend
+mvn wrapper:wrapper
+```
+
+После этого вместо `mvn` можно использовать `./mvnw` (Linux/macOS) или `mvnw.cmd` (Windows).
 
 ### 3. Frontend
 

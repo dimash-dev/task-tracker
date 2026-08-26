@@ -1,0 +1,45 @@
+### Java / Maven ###
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+hs_err_pid*
+replay_pid*
+
+### Spring Boot ###
+# Локальные оверрайды конфигурации (не должны попадать в репозиторий)
+application-local.yml
+application-local.properties
+
+### Node / Angular ###
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+coverage/
+
+### Environment ###
+.env
+.env.local
+*.env.local
+
+### IDE ###
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+!.vscode/extensions.json
+.settings/
+.project
+.classpath
+
+### Logs ###
+*.log
+logs/
+
+### OS ###
+.DS_Store
+Thumbs.db
+desktop.ini

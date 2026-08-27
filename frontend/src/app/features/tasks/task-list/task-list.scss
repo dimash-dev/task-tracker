@@ -145,6 +145,25 @@
   margin-top: 14px;
 }
 
+/* Чип тега — кликабельный: по нему видно, что это управляющий элемент */
+.task-card__tag {
+  cursor: pointer;
+  transition:
+    background-color var(--app-transition),
+    border-color var(--app-transition),
+    color var(--app-transition);
+}
+
+.task-card__tag:hover {
+  background-color: var(--app-accent-soft);
+  color: var(--app-accent);
+}
+
+.task-card__tag:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 2px;
+}
+
 .task-card__date {
   margin: 16px 0 0;
   color: var(--app-text-faint);

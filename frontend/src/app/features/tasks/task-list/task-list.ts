@@ -15,7 +15,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime } from 'rxjs';
 
 import { ApiError } from '../../../core/models/api-error.model';
 import {
@@ -125,18 +125,12 @@ export class TaskList implements OnInit {
 
   constructor() {
     this.searchControl.valueChanges
-      .pipe(debounceTime(TaskList.DEBOUNCE_MS), distinctUntilChanged(), takeUntilDestroyed())
-      .subscribe((value) => {
-        this.searchValue.set(value.trim());
-        this.onFilterChange();
-      });
+      .pipe(debounceTime(TaskList.DEBOUNCE_MS), takeUntilDestroyed())
+      .subscribe((value) => this.applySearch(value));
 
     this.tagControl.valueChanges
-      .pipe(debounceTime(TaskList.DEBOUNCE_MS), distinctUntilChanged(), takeUntilDestroyed())
-      .subscribe((value) => {
-        this.tagValue.set(value.trim());
-        this.onFilterChange();
-      });
+      .pipe(debounceTime(TaskList.DEBOUNCE_MS), takeUntilDestroyed())
+      .subscribe((value) => this.applyTag(value));
   }
 
   ngOnInit(): void {
@@ -264,8 +258,45 @@ export class TaskList implements OnInit {
     });
   }
 
+  /**
+   * Клик по чипу тега на карточке — фильтрует список по этому тегу.
+   *
+   * Значение кладётся в существующее поле фильтра без события, чтобы не
+   * ждать задержку ввода, и сразу применяется тем же методом, что и ручной
+   * ввод. Один путь применения — один запрос к бэкенду.
+   */
+  protected onTagClick(tagName: string): void {
+    this.tagControl.setValue(tagName, { emitEvent: false });
+    this.applyTag(tagName);
+  }
+
   protected statusLabel(status: TaskStatus): string {
     return TASK_STATUS_LABELS[status];
+  }
+
+  /**
+   * Применяет текстовые фильтры. Сравниваем с уже применённым значением,
+   * а не через distinctUntilChanged: тот запоминает последнее пропущенное
+   * им значение и ничего не знает про программные setValue с emitEvent:false
+   * (сброс фильтров, клик по чипу). Сравнение с сигналом всегда актуально —
+   * повторный запрос с теми же условиями не уйдёт.
+   */
+  private applySearch(rawValue: string): void {
+    const value = rawValue.trim();
+    if (value === this.searchValue()) {
+      return;
+    }
+    this.searchValue.set(value);
+    this.onFilterChange();
+  }
+
+  private applyTag(rawValue: string): void {
+    const value = rawValue.trim();
+    if (value === this.tagValue()) {
+      return;
+    }
+    this.tagValue.set(value);
+    this.onFilterChange();
   }
 
   private deleteTask(task: Task): void {

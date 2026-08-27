@@ -117,7 +117,15 @@
             @if (task.tags.length > 0) {
               <mat-chip-set class="task-card__tags">
                 @for (tag of task.tags; track tag) {
-                  <mat-chip>{{ tag }}</mat-chip>
+                  <mat-chip
+                    class="task-card__tag"
+                    role="button"
+                    [attr.tabindex]="0"
+                    [attr.aria-label]="'Отфильтровать по тегу ' + tag"
+                    (click)="onTagClick(tag)"
+                    (keydown.enter)="onTagClick(tag)"
+                    (keydown.space)="$event.preventDefault(); onTagClick(tag)"
+                  >{{ tag }}</mat-chip>
                 }
               </mat-chip-set>
             }

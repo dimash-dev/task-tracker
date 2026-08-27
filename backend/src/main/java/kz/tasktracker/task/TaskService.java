@@ -38,6 +38,10 @@ public class TaskService {
         return TaskResponse.from(getTaskOrThrow(id));
     }
 
+    /**
+     * Здесь достаточно обычного save: для новой сущности обе даты
+     * проставляются слушателем аудита сразу при persist, ещё до flush.
+     */
     @Transactional
     public TaskResponse create(TaskCreateRequest request) {
         Task task = new Task();
@@ -52,6 +56,12 @@ public class TaskService {
     /**
      * PUT заменяет задачу целиком: все поля перезаписываются присланными
      * значениями, включая набор тегов.
+     * <p>
+     * saveAndFlush, а не save: @LastModifiedDate проставляется слушателем
+     * аудита в момент flush. Обычный save для уже загруженной сущности
+     * ничего сразу не пишет — flush случился бы при коммите транзакции,
+     * то есть уже после того, как мы собрали ответ, и клиент получил бы
+     * прежнее значение updatedAt.
      */
     @Transactional
     public TaskResponse update(Long id, TaskUpdateRequest request) {
@@ -61,19 +71,22 @@ public class TaskService {
         task.setStatus(request.status());
         task.setTags(resolveTags(request.tags()));
 
-        return TaskResponse.from(taskRepository.save(task));
+        return TaskResponse.from(taskRepository.saveAndFlush(task));
     }
 
     /**
      * Меняет только статус. Остальные поля задачи остаются как были —
      * мы их даже не трогаем.
+     * <p>
+     * saveAndFlush по той же причине, что и в update: иначе в ответе
+     * уедет устаревший updatedAt.
      */
     @Transactional
     public TaskResponse updateStatus(Long id, TaskStatusUpdateRequest request) {
         Task task = getTaskOrThrow(id);
         task.setStatus(request.status());
 
-        return TaskResponse.from(taskRepository.save(task));
+        return TaskResponse.from(taskRepository.saveAndFlush(task));
     }
 
     @Transactional

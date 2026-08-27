@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { PageResponse } from '../models/page-response.model';
 import { TaskQuery } from '../models/task-query.model';
 import { TaskCreateRequest, TaskUpdateRequest } from '../models/task-request.model';
-import { Task } from '../models/task.model';
+import { Task, TaskStatus } from '../models/task.model';
 
 /**
  * Единственное место в приложении, которое знает адреса бэкенда.
@@ -59,5 +59,18 @@ export class TaskService {
   /** Полное обновление задачи. */
   updateTask(id: number, request: TaskUpdateRequest): Observable<Task> {
     return this.http.put<Task>(`${this.baseUrl}/${id}`, request);
+  }
+
+  /**
+   * Быстрая смена статуса. Отправляем одно поле вместо всей задачи —
+   * остальное бэкенд не трогает.
+   */
+  updateTaskStatus(id: number, status: TaskStatus): Observable<Task> {
+    return this.http.patch<Task>(`${this.baseUrl}/${id}/status`, { status });
+  }
+
+  /** Удаление задачи. Ответ пустой, поэтому тип void. */
+  deleteTask(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }

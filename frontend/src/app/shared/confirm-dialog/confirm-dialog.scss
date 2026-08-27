@@ -1,0 +1,22 @@
+.confirm__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirm__icon {
+  color: #b3261e;
+}
+
+.confirm__message {
+  margin: 0;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* Необратимое действие подсвечиваем красным, чтобы его нельзя было
+   спутать с обычной кнопкой подтверждения. */
+.confirm__danger {
+  background-color: #b3261e;
+  color: #ffffff;
+}

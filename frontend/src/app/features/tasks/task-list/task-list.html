@@ -1,5 +1,13 @@
 <section class="task-list">
 
+  <header class="page-head">
+    <h1 class="page-head__title">Задачи</h1>
+    <button matButton="filled" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Создать задачу
+    </button>
+  </header>
+
   <mat-card class="filters" appearance="outlined">
     <mat-card-content class="filters__row">
 
@@ -63,6 +71,10 @@
         <button matButton="outlined" (click)="resetFilters()">Сбросить фильтры</button>
       } @else {
         <p class="state__text">Задач пока нет</p>
+        <button matButton="filled" (click)="openCreateDialog()">
+          <mat-icon>add</mat-icon>
+          Создать первую задачу
+        </button>
       }
     </div>
   } @else {
@@ -98,6 +110,13 @@
             </p>
 
           </mat-card-content>
+
+          <mat-card-actions align="end">
+            <button matButton (click)="openEditDialog(task)">
+              <mat-icon>edit</mat-icon>
+              Редактировать
+            </button>
+          </mat-card-actions>
         </mat-card>
       }
     </div>

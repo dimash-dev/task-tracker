@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PageResponse } from '../models/page-response.model';
 import { TaskQuery } from '../models/task-query.model';
+import { TaskCreateRequest, TaskUpdateRequest } from '../models/task-request.model';
 import { Task } from '../models/task.model';
 
 /**
@@ -48,5 +49,15 @@ export class TaskService {
     }
 
     return this.http.get<PageResponse<Task>>(this.baseUrl, { params });
+  }
+
+  /** Создание задачи. Ответ — созданная задача с выданным id и датами. */
+  createTask(request: TaskCreateRequest): Observable<Task> {
+    return this.http.post<Task>(this.baseUrl, request);
+  }
+
+  /** Полное обновление задачи. */
+  updateTask(id: number, request: TaskUpdateRequest): Observable<Task> {
+    return this.http.put<Task>(`${this.baseUrl}/${id}`, request);
   }
 }

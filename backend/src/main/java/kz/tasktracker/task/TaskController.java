@@ -3,11 +3,13 @@ package kz.tasktracker.task;
 import jakarta.validation.Valid;
 import kz.tasktracker.task.dto.TaskCreateRequest;
 import kz.tasktracker.task.dto.TaskResponse;
+import kz.tasktracker.task.dto.TaskStatusUpdateRequest;
 import kz.tasktracker.task.dto.TaskUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -53,6 +55,16 @@ public class TaskController {
     public TaskResponse update(@PathVariable Long id,
                                @Valid @RequestBody TaskUpdateRequest request) {
         return taskService.update(id, request);
+    }
+
+    /**
+     * Быстрая смена статуса — для кнопок прямо в карточке задачи,
+     * чтобы не гонять целиком всю задачу ради одного поля.
+     */
+    @PatchMapping("/{id}/status")
+    public TaskResponse updateStatus(@PathVariable Long id,
+                                     @Valid @RequestBody TaskStatusUpdateRequest request) {
+        return taskService.updateStatus(id, request);
     }
 
     @DeleteMapping("/{id}")

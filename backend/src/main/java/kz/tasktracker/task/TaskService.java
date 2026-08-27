@@ -3,6 +3,7 @@ package kz.tasktracker.task;
 import kz.tasktracker.exception.NotFoundException;
 import kz.tasktracker.task.dto.TaskCreateRequest;
 import kz.tasktracker.task.dto.TaskResponse;
+import kz.tasktracker.task.dto.TaskStatusUpdateRequest;
 import kz.tasktracker.task.dto.TaskUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,18 @@ public class TaskService {
         task.setDescription(request.description());
         task.setStatus(request.status());
         task.setTags(resolveTags(request.tags()));
+
+        return TaskResponse.from(taskRepository.save(task));
+    }
+
+    /**
+     * Меняет только статус. Остальные поля задачи остаются как были —
+     * мы их даже не трогаем.
+     */
+    @Transactional
+    public TaskResponse updateStatus(Long id, TaskStatusUpdateRequest request) {
+        Task task = getTaskOrThrow(id);
+        task.setStatus(request.status());
 
         return TaskResponse.from(taskRepository.save(task));
     }

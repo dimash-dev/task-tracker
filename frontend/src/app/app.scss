@@ -1,0 +1,30 @@
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: 12px;
+  background-color: #1565c0;
+  color: #ffffff;
+}
+
+.app-toolbar__title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.app-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px;
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    font-weight: 500;
+  }
+}
+
+.app-content__subtitle {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.6);
+}

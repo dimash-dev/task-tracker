@@ -1,0 +1,14 @@
+/* Глобальные стили приложения.
+   Тема Angular Material подключается отдельным файлом в angular.json. */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #fafafa;
+  color: rgba(0, 0, 0, 0.87);
+}

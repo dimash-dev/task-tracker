@@ -1,5 +1,49 @@
 <section class="task-list">
 
+  <mat-card class="filters" appearance="outlined">
+    <mat-card-content class="filters__row">
+
+      <mat-form-field appearance="outline" class="filters__field filters__field--search">
+        <mat-label>Поиск по заголовку</mat-label>
+        <input matInput [formControl]="searchControl" placeholder="например, фильтр" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filters__field">
+        <mat-label>Статус</mat-label>
+        <mat-select [value]="status()" (selectionChange)="onStatusChange($event.value)">
+          @for (option of statusOptions; track option.label) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filters__field">
+        <mat-label>Тег</mat-label>
+        <input matInput [formControl]="tagControl" placeholder="например, backend" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filters__field">
+        <mat-label>Сортировка</mat-label>
+        <mat-select [value]="direction()" (selectionChange)="onDirectionChange($event.value)">
+          <mat-option value="desc">Новые сначала</mat-option>
+          <mat-option value="asc">Старые сначала</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        matButton="outlined"
+        class="filters__reset"
+        [disabled]="!hasActiveFilters()"
+        (click)="resetFilters()"
+      >
+        <mat-icon>clear</mat-icon>
+        Сбросить
+      </button>
+
+    </mat-card-content>
+  </mat-card>
+
   @if (loading()) {
     <div class="state">
       <mat-spinner diameter="40" />
@@ -14,7 +58,12 @@
   } @else if (tasks().length === 0) {
     <div class="state">
       <mat-icon class="state__icon">inbox</mat-icon>
-      <p class="state__text">Задач пока нет</p>
+      @if (hasActiveFilters()) {
+        <p class="state__text">По выбранным условиям задачи не найдены</p>
+        <button matButton="outlined" (click)="resetFilters()">Сбросить фильтры</button>
+      } @else {
+        <p class="state__text">Задач пока нет</p>
+      }
     </div>
   } @else {
     <div class="task-list__grid">
@@ -52,6 +101,17 @@
         </mat-card>
       }
     </div>
+  }
+
+  @if (!loading() && !errorMessage() && totalElements() > 0) {
+    <mat-paginator
+      class="paginator"
+      [length]="totalElements()"
+      [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="onPageChange($event)"
+    />
   }
 
 </section>

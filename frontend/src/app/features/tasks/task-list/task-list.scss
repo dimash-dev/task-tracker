@@ -1,3 +1,31 @@
+/* ---------- Панель фильтров ---------- */
+
+.filters {
+  margin-bottom: 24px;
+}
+
+.filters__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.filters__field {
+  flex: 1 1 180px;
+  min-width: 160px;
+}
+
+.filters__field--search {
+  flex: 2 1 260px;
+}
+
+.filters__reset {
+  margin-top: 8px;
+}
+
+/* ---------- Сетка карточек ---------- */
+
 .task-list__grid {
   display: grid;
   gap: 16px;
@@ -35,7 +63,8 @@
   font-size: 0.8rem;
 }
 
-/* Цветные метки статусов */
+/* ---------- Метки статусов ---------- */
+
 .badge {
   flex-shrink: 0;
   padding: 4px 10px;
@@ -60,7 +89,8 @@
   color: #2e7d32;
 }
 
-/* Загрузка, ошибка, пустой список */
+/* ---------- Состояния ---------- */
+
 .state {
   display: flex;
   flex-direction: column;
@@ -83,4 +113,11 @@
 
 .state--error {
   color: #b3261e;
+}
+
+/* ---------- Пагинация ---------- */
+
+.paginator {
+  margin-top: 16px;
+  background: transparent;
 }

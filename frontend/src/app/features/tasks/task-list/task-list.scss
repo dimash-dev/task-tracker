@@ -138,3 +138,58 @@
   margin-top: 16px;
   background: transparent;
 }
+
+/* ---------- Действия на карточке ---------- */
+
+.task-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 16px;
+}
+
+.task-card__status {
+  width: 150px;
+}
+
+.task-card__spacer {
+  flex: 1 1 auto;
+}
+
+/* Удаление необратимо — кнопка должна читаться как опасная. */
+.task-card__delete {
+  color: #b3261e;
+}
+
+/* ---------- Фоновое обновление ---------- */
+
+/* Высота зафиксирована, чтобы появление полоски не сдвигало содержимое. */
+.refresh-bar {
+  height: 4px;
+  margin-bottom: 12px;
+}
+
+.inline-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background-color: #fdeded;
+  color: #b3261e;
+  font-size: 0.875rem;
+}
+
+.inline-error__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.inline-error__text {
+  flex: 1 1 auto;
+}

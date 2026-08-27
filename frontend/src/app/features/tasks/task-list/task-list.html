@@ -52,12 +52,29 @@
     </mat-card-content>
   </mat-card>
 
-  @if (loading()) {
+  <!-- Фоновое обновление: тонкая полоска вместо подмены всего списка.
+       Место под неё зарезервировано всегда, чтобы разметка не дёргалась. -->
+  <div class="refresh-bar">
+    @if (refreshing()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+  </div>
+
+  <!-- Ошибка при фоновом обновлении: список остаётся, сообщение сверху -->
+  @if (errorMessage() && tasks().length > 0) {
+    <div class="inline-error">
+      <mat-icon class="inline-error__icon">error_outline</mat-icon>
+      <span class="inline-error__text">{{ errorMessage() }}</span>
+      <button matButton (click)="load()">Повторить</button>
+    </div>
+  }
+
+  @if (initialLoading()) {
     <div class="state">
       <mat-spinner diameter="40" />
       <p class="state__text">Загружаем задачи…</p>
     </div>
-  } @else if (errorMessage()) {
+  } @else if (errorMessage() && tasks().length === 0) {
     <div class="state state--error">
       <mat-icon class="state__icon">error_outline</mat-icon>
       <p class="state__text">{{ errorMessage() }}</p>
@@ -111,18 +128,53 @@
 
           </mat-card-content>
 
-          <mat-card-actions align="end">
-            <button matButton (click)="openEditDialog(task)">
+          <mat-card-actions class="task-card__actions">
+
+            <mat-form-field
+              appearance="outline"
+              subscriptSizing="dynamic"
+              class="task-card__status"
+            >
+              <mat-label>Статус</mat-label>
+              <mat-select
+                [value]="task.status"
+                [disabled]="pendingTaskId() === task.id"
+                (selectionChange)="onStatusSelected(task, $event.value)"
+              >
+                @for (option of editableStatusOptions; track option.value) {
+                  <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <span class="task-card__spacer"></span>
+
+            <button
+              matButton
+              [disabled]="pendingTaskId() === task.id"
+              (click)="openEditDialog(task)"
+            >
               <mat-icon>edit</mat-icon>
               Редактировать
             </button>
+
+            <button
+              matButton
+              class="task-card__delete"
+              [disabled]="pendingTaskId() === task.id"
+              (click)="confirmDelete(task)"
+            >
+              <mat-icon>delete</mat-icon>
+              Удалить
+            </button>
+
           </mat-card-actions>
         </mat-card>
       }
     </div>
   }
 
-  @if (!loading() && !errorMessage() && totalElements() > 0) {
+  @if (!initialLoading() && totalElements() > 0) {
     <mat-paginator
       class="paginator"
       [length]="totalElements()"

@@ -1,3 +1,7 @@
+/* =========================================================================
+   Экран списка задач
+   ========================================================================= */
+
 /* ---------- Шапка страницы ---------- */
 
 .page-head {
@@ -5,20 +9,39 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .page-head__title {
   margin: 0;
-  font-size: 1.75rem;
-  font-weight: 500;
+  font-size: 1.9rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--app-text);
+}
+
+/* Главное действие экрана — заметная кнопка со свечением */
+.page-head button {
+  --mat-sys-primary: var(--app-accent);
+  box-shadow: 0 6px 22px var(--app-glow);
+  transition: box-shadow var(--app-transition), transform var(--app-transition);
+}
+
+.page-head button:hover:not([disabled]) {
+  box-shadow: 0 8px 28px var(--app-glow);
+  transform: translateY(-1px);
 }
 
 /* ---------- Панель фильтров ---------- */
 
 .filters {
   margin-bottom: 24px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  background: linear-gradient(180deg, rgba(26, 33, 56, 0.72), rgba(20, 26, 46, 0.6));
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
 }
 
 .filters__row {
@@ -26,11 +49,12 @@
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 12px;
+  padding: 16px;
 }
 
 .filters__field {
   flex: 1 1 180px;
-  min-width: 160px;
+  min-width: 0;
 }
 
 .filters__field--search {
@@ -39,14 +63,48 @@
 
 .filters__reset {
   margin-top: 8px;
+  flex: 0 0 auto;
 }
 
 /* ---------- Сетка карточек ---------- */
 
 .task-list__grid {
   display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+}
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  background: linear-gradient(180deg, rgba(26, 33, 56, 0.78), rgba(19, 24, 43, 0.82));
+  transition:
+    transform var(--app-transition),
+    border-color var(--app-transition),
+    box-shadow var(--app-transition);
+}
+
+/* Верхняя грань подсвечивается при наведении — акцент без пестроты */
+.task-card::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--app-accent), var(--app-accent-2), transparent);
+  opacity: 0;
+  transition: opacity var(--app-transition);
+}
+
+.task-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--app-border-strong);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(124, 157, 255, 0.12);
+}
+
+.task-card:hover::before {
+  opacity: 0.85;
 }
 
 .task-card__head {
@@ -58,85 +116,72 @@
 
 .task-card__title {
   margin: 0;
-  font-size: 1.05rem;
-  font-weight: 500;
-  line-height: 1.4;
+  min-width: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--app-text);
+  /* Длинный заголовок без пробелов не растягивает карточку */
+  overflow-wrap: anywhere;
 }
 
 .task-card__description {
   margin: 12px 0 0;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--app-text-muted);
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+
+  /* Очень длинное описание сворачивается до пяти строк,
+     чтобы одна задача не занимала весь экран */
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .task-card__tags {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 
 .task-card__date {
   margin: 16px 0 0;
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 0.8rem;
+  color: var(--app-text-faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
 }
 
 /* ---------- Метки статусов ---------- */
 
 .badge {
   flex-shrink: 0;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
 .badge--todo {
-  background-color: #eceff1;
-  color: #37474f;
+  background-color: rgba(154, 163, 189, 0.14);
+  border-color: rgba(154, 163, 189, 0.32);
+  color: #c3cade;
 }
 
 .badge--in-progress {
-  background-color: #fff3e0;
-  color: #e65100;
+  background-color: rgba(255, 196, 107, 0.14);
+  border-color: rgba(255, 196, 107, 0.34);
+  color: var(--app-warning);
 }
 
 .badge--done {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-/* ---------- Состояния ---------- */
-
-.state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 64px 16px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.state__icon {
-  width: 40px;
-  height: 40px;
-  font-size: 40px;
-}
-
-.state__text {
-  margin: 0;
-}
-
-.state--error {
-  color: #b3261e;
-}
-
-/* ---------- Пагинация ---------- */
-
-.paginator {
-  margin-top: 16px;
-  background: transparent;
+  background-color: rgba(110, 231, 168, 0.13);
+  border-color: rgba(110, 231, 168, 0.32);
+  color: var(--app-success);
 }
 
 /* ---------- Действия на карточке ---------- */
@@ -146,40 +191,92 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px 16px;
+  margin-top: auto;
+  padding: 10px 16px 16px;
+  border-top: 1px solid rgba(38, 48, 82, 0.7);
 }
 
 .task-card__status {
-  width: 150px;
+  /* 158px не хватало на «К выполнению»: текст обрезался многоточием.
+     Теперь поле занимает не меньше 190px и растёт, если в строке есть
+     место. Кнопки при нехватке ширины переносятся на строку ниже —
+     сетка карточек от этого не меняется. */
+  flex: 1 1 200px;
+  min-width: 190px;
 }
 
 .task-card__spacer {
   flex: 1 1 auto;
 }
 
-/* Удаление необратимо — кнопка должна читаться как опасная. */
+/* Удаление необратимо — кнопка должна читаться как опасная */
 .task-card__delete {
-  color: #b3261e;
+  color: var(--app-danger);
+  transition: background-color var(--app-transition);
+}
+
+.task-card__delete:hover:not([disabled]) {
+  background-color: rgba(255, 138, 128, 0.12);
+}
+
+/* ---------- Состояния ---------- */
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 72px 16px;
+  text-align: center;
+  color: var(--app-text-muted);
+  border: 1px dashed var(--app-border);
+  border-radius: var(--app-radius);
+  background: rgba(20, 26, 46, 0.4);
+}
+
+.state__icon {
+  width: 44px;
+  height: 44px;
+  font-size: 44px;
+  color: var(--app-text-faint);
+}
+
+.state__text {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.state--error {
+  color: var(--app-danger);
+  border-color: rgba(255, 138, 128, 0.35);
+  background: rgba(92, 26, 23, 0.18);
+}
+
+.state--error .state__icon {
+  color: var(--app-danger);
 }
 
 /* ---------- Фоновое обновление ---------- */
 
-/* Высота зафиксирована, чтобы появление полоски не сдвигало содержимое. */
+/* Высота зафиксирована, чтобы появление полоски не сдвигало содержимое */
 .refresh-bar {
   height: 4px;
   margin-bottom: 12px;
+  border-radius: 999px;
+  overflow: hidden;
 }
 
 .inline-error {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 16px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  background-color: #fdeded;
-  color: #b3261e;
+  padding: 11px 14px;
+  border: 1px solid rgba(255, 138, 128, 0.32);
+  border-radius: 10px;
+  background-color: rgba(92, 26, 23, 0.22);
+  color: var(--app-danger);
   font-size: 0.875rem;
 }
 
@@ -192,4 +289,76 @@
 
 .inline-error__text {
   flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---------- Пагинация ---------- */
+
+.paginator {
+  /* Свои переменные Material наследуются внутрь компонента и работают
+     несмотря на инкапсуляцию стилей — надёжнее, чем перебивать классы. */
+  --mat-paginator-container-background-color: rgba(20, 26, 46, 0.6);
+  --mat-paginator-container-text-color: var(--app-text-muted);
+
+  margin-top: 20px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  overflow: hidden;
+}
+
+/* ---------- Узкие экраны ---------- */
+
+@media (max-width: 700px) {
+  .page-head {
+    align-items: stretch;
+  }
+
+  .page-head__title {
+    font-size: 1.55rem;
+  }
+
+  /* Главное действие занимает всю ширину — легче попасть пальцем */
+  .page-head button {
+    width: 100%;
+  }
+
+  .filters__row {
+    padding: 12px;
+  }
+
+  .filters__field,
+  .filters__field--search {
+    flex: 1 1 100%;
+  }
+
+  .filters__reset {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .task-list__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .task-card__status {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .task-card__spacer {
+    display: none;
+  }
+}
+
+/* Уважаем системную настройку «меньше движения» */
+@media (prefers-reduced-motion: reduce) {
+  .task-card,
+  .task-card::before,
+  .page-head button {
+    transition: none;
+  }
+
+  .task-card:hover {
+    transform: none;
+  }
 }

@@ -17,4 +17,5 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class App {
   protected readonly appName = 'Task Tracker';
+  protected readonly appTagline = 'Manage. Focus. Complete.';
 }

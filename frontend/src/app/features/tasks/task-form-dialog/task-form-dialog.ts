@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Observable } from 'rxjs';
 
 import { ApiError } from '../../../core/models/api-error.model';
-import { TASK_STATUS_LABELS, Task, TaskStatus } from '../../../core/models/task.model';
+import { TASK_STATUS_OPTIONS, Task, TaskStatus } from '../../../core/models/task.model';
 import { TaskService } from '../../../core/services/task.service';
 
 /** Что передаётся в диалог при открытии. Без задачи — режим создания. */
@@ -61,11 +61,7 @@ export class TaskFormDialog {
 
   protected readonly titleMaxLength = TaskFormDialog.TITLE_MAX_LENGTH;
 
-  protected readonly statusOptions: ReadonlyArray<{ value: TaskStatus; label: string }> = [
-    { value: 'TODO', label: TASK_STATUS_LABELS.TODO },
-    { value: 'IN_PROGRESS', label: TASK_STATUS_LABELS.IN_PROGRESS },
-    { value: 'DONE', label: TASK_STATUS_LABELS.DONE },
-  ];
+  protected readonly statusOptions = TASK_STATUS_OPTIONS;
 
   /**
    * Ограничения повторяют серверные: заголовок обязателен и не длиннее 120.

@@ -1,6 +1,14 @@
 <mat-toolbar class="app-toolbar">
-  <mat-icon aria-hidden="true">checklist</mat-icon>
-  <span class="app-toolbar__title">{{ appName }}</span>
+  <div class="app-toolbar__brand">
+    <span class="app-toolbar__mark" aria-hidden="true">
+      <mat-icon>check_circle</mat-icon>
+    </span>
+
+    <span class="app-toolbar__text">
+      <span class="app-toolbar__title">{{ appName }}</span>
+      <span class="app-toolbar__subtitle">{{ appTagline }}</span>
+    </span>
+  </div>
 </mat-toolbar>
 
 <main class="app-content">

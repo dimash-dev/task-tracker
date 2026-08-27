@@ -18,7 +18,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { ApiError } from '../../../core/models/api-error.model';
-import { TASK_STATUS_LABELS, Task, TaskStatus } from '../../../core/models/task.model';
+import {
+  TASK_STATUS_LABELS,
+  TASK_STATUS_OPTIONS,
+  Task,
+  TaskStatus,
+} from '../../../core/models/task.model';
 import { TaskService } from '../../../core/services/task.service';
 import { ConfirmDialog, ConfirmDialogData } from '../../../shared/confirm-dialog/confirm-dialog';
 import { ruPaginatorIntl } from '../../../shared/ru-paginator-intl';
@@ -109,19 +114,14 @@ export class TaskList implements OnInit {
       this.searchValue() !== '',
   );
 
+  /** Для фильтра к статусам добавляется вариант «все». */
   protected readonly statusOptions: ReadonlyArray<{ value: TaskStatus | null; label: string }> = [
     { value: null, label: 'Все статусы' },
-    { value: 'TODO', label: TASK_STATUS_LABELS.TODO },
-    { value: 'IN_PROGRESS', label: TASK_STATUS_LABELS.IN_PROGRESS },
-    { value: 'DONE', label: TASK_STATUS_LABELS.DONE },
+    ...TASK_STATUS_OPTIONS,
   ];
 
-  /** Статусы для смены прямо на карточке — без варианта «Все». */
-  protected readonly editableStatusOptions: ReadonlyArray<{ value: TaskStatus; label: string }> = [
-    { value: 'TODO', label: TASK_STATUS_LABELS.TODO },
-    { value: 'IN_PROGRESS', label: TASK_STATUS_LABELS.IN_PROGRESS },
-    { value: 'DONE', label: TASK_STATUS_LABELS.DONE },
-  ];
+  /** Статусы для смены прямо на карточке — без варианта «все». */
+  protected readonly editableStatusOptions = TASK_STATUS_OPTIONS;
 
   constructor() {
     this.searchControl.valueChanges

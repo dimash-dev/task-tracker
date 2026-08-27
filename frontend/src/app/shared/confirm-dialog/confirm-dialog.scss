@@ -1,22 +1,25 @@
 .confirm__title {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .confirm__icon {
-  color: #b3261e;
+  color: var(--app-danger);
+  filter: drop-shadow(0 0 8px rgba(255, 138, 128, 0.35));
 }
 
 .confirm__message {
   margin: 0;
-  line-height: 1.5;
-  color: rgba(0, 0, 0, 0.7);
+  line-height: 1.55;
+  color: var(--app-text-muted);
+  overflow-wrap: anywhere;
 }
 
 /* Необратимое действие подсвечиваем красным, чтобы его нельзя было
-   спутать с обычной кнопкой подтверждения. */
+   спутать с обычным подтверждением */
 .confirm__danger {
-  background-color: #b3261e;
-  color: #ffffff;
+  --mat-sys-primary: var(--app-danger);
+  --mat-sys-on-primary: #43110d;
+  box-shadow: 0 6px 20px rgba(255, 138, 128, 0.28);
 }

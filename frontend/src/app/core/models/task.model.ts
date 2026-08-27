@@ -27,3 +27,14 @@ export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
   IN_PROGRESS: 'В работе',
   DONE: 'Готово',
 };
+
+/**
+ * Статусы в виде готовых пунктов для выпадающих списков.
+ * Один источник на всё приложение: и форма, и карточка, и фильтр
+ * берут список отсюда, а не заводят свою копию.
+ */
+export const TASK_STATUS_OPTIONS: ReadonlyArray<{ value: TaskStatus; label: string }> = [
+  { value: 'TODO', label: TASK_STATUS_LABELS.TODO },
+  { value: 'IN_PROGRESS', label: TASK_STATUS_LABELS.IN_PROGRESS },
+  { value: 'DONE', label: TASK_STATUS_LABELS.DONE },
+];

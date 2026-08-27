@@ -1,13 +1,14 @@
 package kz.tasktracker.task;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * Доступ к таблице tasks.
  * <p>
- * Тело пустое намеренно: JpaRepository уже даёт save, findById, findAll,
- * deleteById и постраничную выборку. Свои методы появятся на этапах CRUD
- * и фильтрации, когда станет понятно, какие именно нужны.
+ * JpaRepository даёт save, findById, findAll, deleteById.
+ * JpaSpecificationExecutor добавляет findAll(Specification, Pageable) —
+ * выборку с произвольными условиями, сортировкой и постранично.
  */
-public interface TaskRepository extends JpaRepository<Task, Long> {
+public interface TaskRepository extends JpaRepository<Task, Long>, JpaSpecificationExecutor<Task> {
 }

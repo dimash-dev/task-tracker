@@ -1,6 +1,7 @@
 package kz.tasktracker.task;
 
 import jakarta.validation.Valid;
+import kz.tasktracker.task.dto.PageResponse;
 import kz.tasktracker.task.dto.TaskCreateRequest;
 import kz.tasktracker.task.dto.TaskResponse;
 import kz.tasktracker.task.dto.TaskStatusUpdateRequest;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * HTTP-интерфейс к задачам. Здесь только приём запроса и отдача ответа —
@@ -31,9 +31,20 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    /**
+     * Список задач. Все параметры необязательны и комбинируются между собой:
+     * ?status=TODO&tag=backend&search=фильтр&page=0&size=20&direction=desc
+     */
     @GetMapping
-    public List<TaskResponse> findAll() {
-        return taskService.findAll();
+    public PageResponse<TaskResponse> search(
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "desc") String direction) {
+
+        return taskService.search(status, tag, search, page, size, direction);
     }
 
     @GetMapping("/{id}")

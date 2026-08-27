@@ -5,6 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +17,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { TASK_STATUS_LABELS, Task, TaskStatus } from '../../../core/models/task.model';
 import { TaskService } from '../../../core/services/task.service';
 import { ruPaginatorIntl } from '../../../shared/ru-paginator-intl';
+import { TaskFormDialog, TaskFormDialogData } from '../task-form-dialog/task-form-dialog';
 
 /**
  * Список задач с фильтрами, поиском, сортировкой и постраничной навигацией.
@@ -48,6 +50,7 @@ export class TaskList implements OnInit {
   private static readonly DEBOUNCE_MS = 400;
 
   private readonly taskService = inject(TaskService);
+  private readonly dialog = inject(MatDialog);
 
   /** Текстовые фильтры: реагируют с задержкой, чтобы не слать запрос на каждую букву. */
   protected readonly searchControl = new FormControl('', { nonNullable: true });
@@ -163,8 +166,36 @@ export class TaskList implements OnInit {
     this.load();
   }
 
+  /** Открывает пустую форму создания. */
+  protected openCreateDialog(): void {
+    this.openFormDialog({});
+  }
+
+  /** Открывает форму, заполненную данными задачи. */
+  protected openEditDialog(task: Task): void {
+    this.openFormDialog({ task });
+  }
+
   protected statusLabel(status: TaskStatus): string {
     return TASK_STATUS_LABELS[status];
+  }
+
+  /**
+   * Диалог возвращает true, только если бэкенд подтвердил сохранение.
+   * Тогда список перезагружается с сервера — локально массив не правим,
+   * иначе экран разошёлся бы с тем, что на самом деле в базе.
+   */
+  private openFormDialog(data: TaskFormDialogData): void {
+    const dialogRef = this.dialog.open<TaskFormDialog, TaskFormDialogData, boolean>(
+      TaskFormDialog,
+      { data, width: '560px', maxWidth: '95vw', autoFocus: 'first-tabbable' },
+    );
+
+    dialogRef.afterClosed().subscribe((saved) => {
+      if (saved) {
+        this.load();
+      }
+    });
   }
 
   /**

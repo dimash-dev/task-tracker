@@ -1,0 +1,35 @@
+.task-form {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+  min-width: 320px;
+}
+
+.task-form__field {
+  width: 100%;
+}
+
+.task-form__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #fdeded;
+  color: #b3261e;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.task-form__error-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.task-form__spinner {
+  display: inline-block;
+  margin-right: 8px;
+}

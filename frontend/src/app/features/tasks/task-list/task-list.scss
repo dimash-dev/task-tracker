@@ -1,0 +1,86 @@
+.task-list__grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+}
+
+.task-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.task-card__description {
+  margin: 12px 0 0;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.task-card__tags {
+  margin-top: 12px;
+}
+
+.task-card__date {
+  margin: 16px 0 0;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 0.8rem;
+}
+
+/* Цветные метки статусов */
+.badge {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge--todo {
+  background-color: #eceff1;
+  color: #37474f;
+}
+
+.badge--in-progress {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.badge--done {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Загрузка, ошибка, пустой список */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 64px 16px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.state__icon {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+.state__text {
+  margin: 0;
+}
+
+.state--error {
+  color: #b3261e;
+}

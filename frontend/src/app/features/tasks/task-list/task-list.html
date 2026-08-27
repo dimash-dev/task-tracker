@@ -1,0 +1,57 @@
+<section class="task-list">
+
+  @if (loading()) {
+    <div class="state">
+      <mat-spinner diameter="40" />
+      <p class="state__text">Загружаем задачи…</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="state state--error">
+      <mat-icon class="state__icon">error_outline</mat-icon>
+      <p class="state__text">{{ errorMessage() }}</p>
+      <button matButton="outlined" (click)="load()">Повторить</button>
+    </div>
+  } @else if (tasks().length === 0) {
+    <div class="state">
+      <mat-icon class="state__icon">inbox</mat-icon>
+      <p class="state__text">Задач пока нет</p>
+    </div>
+  } @else {
+    <div class="task-list__grid">
+      @for (task of tasks(); track task.id) {
+        <mat-card class="task-card" appearance="outlined">
+          <mat-card-content>
+
+            <div class="task-card__head">
+              <h2 class="task-card__title">{{ task.title }}</h2>
+              <span
+                class="badge"
+                [class.badge--todo]="task.status === 'TODO'"
+                [class.badge--in-progress]="task.status === 'IN_PROGRESS'"
+                [class.badge--done]="task.status === 'DONE'"
+              >{{ statusLabel(task.status) }}</span>
+            </div>
+
+            @if (task.description) {
+              <p class="task-card__description">{{ task.description }}</p>
+            }
+
+            @if (task.tags.length > 0) {
+              <mat-chip-set class="task-card__tags">
+                @for (tag of task.tags; track tag) {
+                  <mat-chip>{{ tag }}</mat-chip>
+                }
+              </mat-chip-set>
+            }
+
+            <p class="task-card__date">
+              Создана {{ task.createdAt | date: 'dd.MM.yyyy HH:mm' }}
+            </p>
+
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+
+</section>
